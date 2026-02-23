@@ -34,6 +34,9 @@
 		'salt',
 		'sodium'
 	];
+	const EMPTY_NUTRIENT_TOOLTIPS: Record<string, string> = {
+		fibers: 'product.edit.tooltips.empty_fiber'
+	};
 
 	let showInfo = $state(false);
 	function toggleInfo() {
@@ -247,8 +250,12 @@
 				{#each DEFAULT_SHOWN as nutrient (nutrient)}
 					<label class={['input w-full', fieldInputClasses([nutrient, 'all'])]}>
 						<span class="label w-60">
-							<span class="grow">
+							<span class="flex grow items-center gap-2">
 								{$_(`product.edit.nutrient.${nutrient}`)}
+
+								{#if EMPTY_NUTRIENT_TOOLTIPS[nutrient] && (product.nutriments?.[nutrient] === undefined || product.nutriments?.[nutrient] === null || (product.nutriments?.[nutrient] as unknown) === '')}
+									<InfoTooltip text={$_(EMPTY_NUTRIENT_TOOLTIPS[nutrient])} />
+								{/if}
 							</span>
 							{#if issuesByField([nutrient, 'all']).length > 0}
 								{@const issue = issuesByField(nutrient)[0] ?? issuesByField('all')[0]}
